@@ -56,6 +56,8 @@ export async function POST(req: Request) {
     jobsCompleted: 0,
     successfulPayments: 0,
     isProvider: false,
+    createdAt: new Date().toISOString(),
+    source: "local",
   };
   store.agents.unshift(agent);
   store.agentSecrets[agent.id] = kp.secret();
