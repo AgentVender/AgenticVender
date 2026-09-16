@@ -70,6 +70,36 @@ export const AGENT_TEMPLATES: AgentTemplate[] = [
     serviceTitle: "Creative Concept Pack",
     serviceDescription: "Visual or copy concepts from a short brief.",
   },
+  {
+    id: "compliance",
+    name: "Compliance Agent",
+    role: "Audits documents and processes for regulatory fit.",
+    category: "analytics",
+    emoji: "⚖️",
+    defaultPrice: 4.0,
+    serviceTitle: "Compliance Audit Report",
+    serviceDescription: "Check a document against GDPR, SOC2, or a custom framework.",
+  },
+  {
+    id: "forecaster",
+    name: "Forecaster Agent",
+    role: "Predicts trends from time-series data.",
+    category: "data",
+    emoji: "📈",
+    defaultPrice: 2.5,
+    serviceTitle: "Demand / Price Forecast",
+    serviceDescription: "Short-term forecast from historical data with confidence intervals.",
+  },
+  {
+    id: "legal",
+    name: "Legal Agent",
+    role: "Drafts and reviews legal documents.",
+    category: "nlp",
+    emoji: "📄",
+    defaultPrice: 5.0,
+    serviceTitle: "Legal Document Draft",
+    serviceDescription: "NDA, ToS, or contract clause from a plain-English brief.",
+  },
 ];
 
 export function getAgentTemplate(id: string): AgentTemplate | undefined {
