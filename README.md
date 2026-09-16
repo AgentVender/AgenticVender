@@ -1,12 +1,14 @@
-# AgentPay — Payments for Autonomous Agents on Stellar
+# AgenticVender — Autonomous Agent Commerce on Stellar
 
-> Give an AI agent its own wallet and a **capped, expiring, on-chain spending limit**.
+> Give an AI agent its own scoped wallet and a **capped, expiring, on-chain spending limit**.
 > It then discovers services and pays for them **autonomously** in USDC — while a human
 > stays in control via a single Freighter signature. Every payment, limit check, and
 > reputation update is enforced by Soroban smart contracts on Stellar.
 
-AgentPay turns AI agents into real economic actors: they can _earn_ and _spend_ on-chain,
+AgenticVender turns AI agents into real economic actors: they can _earn_ and _spend_ on-chain,
 with guardrails that a human grants once and can revoke at any time.
+
+---
 
 ### Testnet deployments (Stellar Expert)
 
@@ -36,11 +38,10 @@ with guardrails that a human grants once and can revoke at any time.
 ### Test output (frontend + contracts)
 
 ```
-> agentpay@0.1.0 test
+> agenticvender@0.2.0 test
 > vitest run
 
- RUN  v4.1.8 C:/Users/yusuf/Desktop/AgentPay
-
+ RUN  v4.1.8
  Test Files  6 passed (6)
       Tests  20 passed (20)
    Start at  17:10:47
@@ -67,7 +68,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ## Why this matters
 
 - **Agentic commerce is here, but agents can't safely hold money.** Giving an agent your
-  card or seed phrase is reckless. AgentPay gives it a _scoped_ wallet: spend up to N USDC
+  card or seed phrase is reckless. AgenticVender gives it a _scoped_ wallet: spend up to N USDC
   per day, expiring at time T — enforced by a contract, not by trust.
 - **Stellar is the right rail:** sub-cent fees, ~5s finality, native USDC, and Soroban smart
   contracts for the delegation + marketplace logic.
@@ -81,7 +82,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
  Human (console PIN + Freighter)   Agent (own keypair)             Soroban (Testnet)
  ──────────────────────────────── ───────────────────             ─────────────────
- login ──console PIN──▶ AgentPay console
+ login ──console PIN──▶ AgenticVender console
  grant(limit, expiry) ──Freighter sign──────────────────────────▶ DelegationManager.grant
                                   run(goal)
                                   pick a service (AI/heuristic)
@@ -184,11 +185,11 @@ npm run demo:seed
 
 Then in the browser (`http://localhost:3000`):
 
-1. **Unlock AgentPay** with your console PIN (first visit: create PIN) or **Continue Demo**.
+1. **Unlock AgenticVender** with your console PIN (first visit: create PIN) or **Continue Demo**.
 2. **Connect Freighter** (Testnet, funded account).
 3. Open **Dashboard** — three **Demo** agents are pre-configured (`npm run demo:seed`):
    - **Research Agent** — hero demo, already has 100 USDC + 10/day delegation + one sample payment in Activity
-   - **Budget Scout** — 6 USDC/day limit for “Run until budget runs out”
+   - **Budget Scout** — 6 USDC/day limit for "Run until budget runs out"
    - **Market Analyst** — ready for marketplace purchases
 4. **Research Agent** → **Run once** (or **Run until budget runs out** on Budget Scout).
 5. Show **Activity** feed with live SSE + Stellar Expert tx links.
@@ -199,9 +200,9 @@ Then in the browser (`http://localhost:3000`):
 
 ---
 
-## Security notes (hackathon scope → production)
+## Security notes
 
-- Console PIN hashes are stored locally in `.data/auth.json`; this protects access to the AgentPay
+- Console PIN hashes are stored locally in `.data/auth.json`; this protects access to the AgenticVender
   console, while Freighter remains the authority for on-chain spending.
 - Agent secret keys live in server memory and are **encrypted at rest (AES-256-GCM)** in
   `.data/store.json`. For production, use a KMS / secret manager (or smart-wallet auth) and set a
@@ -214,7 +215,7 @@ Then in the browser (`http://localhost:3000`):
 
 ## Why Stellar?
 
-AgentPay was built specifically for Stellar — not because Stellar is a blockchain, but because
+AgenticVender was built specifically for Stellar — not because Stellar is a blockchain, but because
 it solves three hard problems for autonomous agent commerce:
 
 ### 1. **Fast finality (≈5 seconds)**
@@ -233,7 +234,7 @@ it solves three hard problems for autonomous agent commerce:
   a $0.001 data query, or a $0.50 computation. Without Stellar's low fees, these use cases
   don't exist.
 - At scale (millions of agent transactions), the fee difference vs. other chains adds up to
-  billions in economic efficiency.
+  significant economic efficiency gains.
 
 ### 3. **Native delegation model (Soroban smart contracts)**
 
@@ -243,7 +244,7 @@ it solves three hard problems for autonomous agent commerce:
 - The delegation is stored on-chain (not in a separate contract state), meaning it's
   atomic, auditable, and revocable by the contract owner _any time_ — even if the agent's
   keypair is compromised.
-- This is why AgentPay can safely give an agent autonomous signing power with bulletproof
+- This is why AgenticVender can safely give an agent autonomous signing power with bulletproof
   guardrails.
 
 ### 4. **Native USDC on Stellar (Circle)**

@@ -1,8 +1,8 @@
 {
-  "name": "agentpay",
-  "version": "0.1.0",
+  "name": "agenticvender",
+  "version": "0.2.0",
   "private": true,
-  "description": "Payments for Autonomous Agents — Freighter-signed delegated spending and agent-to-agent USDC payments on Stellar.",
+  "description": "AgenticVender — Autonomous agent commerce on Stellar. Freighter-signed delegated spending, scoped USDC wallets, and agent-to-agent payments enforced by Soroban smart contracts.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

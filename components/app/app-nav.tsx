@@ -70,7 +70,7 @@ export function AppNav() {
           <div className="flex size-10 items-center justify-center rounded-xl bg-primary/15">
             <Bot className="size-6 text-primary" />
           </div>
-          AgentPay
+          AgenticVender
         </Link>
         <nav className="flex flex-col gap-1">
           {nav.map((n) => (

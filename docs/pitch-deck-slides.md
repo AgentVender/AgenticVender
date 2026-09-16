@@ -1,7 +1,7 @@
-# AgentPay — Pitch deck slides (copy into Google Slides template)
+# AgenticVender — Pitch deck slides (copy into Google Slides template)
 
 Use the official hackathon template, then paste each block as one slide.
-Recommended order: after “Solution / Demo” slides, before “Roadmap / Team”.
+Recommended order: after "Solution / Demo" slides, before "Roadmap / Team".
 
 ---
 
@@ -9,7 +9,7 @@ Recommended order: after “Solution / Demo” slides, before “Roadmap / Team�
 
 **Title:** Threat model — what we protect against
 
-**Subtitle:** AgentPay · Soroban-enforced guardrails on Stellar Testnet
+**Subtitle:** AgenticVender · Soroban-enforced guardrails on Stellar Testnet
 
 ### Problem
 Autonomous agents need to spend money. Giving them your seed phrase or unlimited wallet access is unsafe.
@@ -35,7 +35,7 @@ Autonomous agents need to spend money. Giving them your seed phrase or unlimited
 
 **Title:** Why Stellar is the right chain for agentic commerce
 
-**Subtitle:** Not “a blockchain app” — a settlement layer built for machine-speed payments
+**Subtitle:** Not "a blockchain app" — a settlement layer built for machine-speed payments
 
 ### 1. Fast finality (~5 seconds)
 Agents chain decisions: discover → pay → verify → pay again. 12-block chains break the UX.
@@ -51,16 +51,16 @@ Single atomic **grant(limit, expiry)** — not approve/transfer patterns. Capped
 
 ### Demo proof
 - Deployed on **Stellar Testnet**
-- Live txs on **stellar.expert** (Activity feed → “View on Stellar Expert”)
+- Live txs on **stellar.expert** (Activity feed → "View on Stellar Expert")
 - Contracts: AgentRegistry · DelegationManager · Marketplace
 
-**Speaker note (30 sec):** “This use case only feels good on Stellar because finality + USDC + Soroban delegation match how agents actually spend.”
+**Speaker note (30 sec):** "This use case only feels good on Stellar because finality + USDC + Soroban delegation match how agents actually spend."
 
 ---
 
 ## Optional closing slide (if time)
 
-**Title:** AgentPay in one flow
+**Title:** AgenticVender in one flow
 
 ```
 Freighter grant → Agent purchase → USDC on-chain → Reputation updated

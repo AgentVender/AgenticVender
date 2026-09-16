@@ -84,7 +84,7 @@ function LoginContent() {
             <div className="flex size-10 items-center justify-center rounded-xl bg-primary/15">
               <Bot className="size-6 text-primary" />
             </div>
-            AgentPay
+            AgenticVender
           </Link>
           <Link href="/">
             <Button variant="ghost" size="lg" className="text-base">
@@ -100,7 +100,7 @@ function LoginContent() {
             <div className="mx-auto mb-4 flex size-14 items-center justify-center rounded-2xl bg-primary/15">
               <KeyRound className="size-7 text-primary" />
             </div>
-            <CardTitle className="text-3xl sm:text-4xl">Unlock AgentPay</CardTitle>
+            <CardTitle className="text-3xl sm:text-4xl">Unlock AgenticVender</CardTitle>
             <CardDescription className="text-base leading-relaxed sm:text-lg">
               {setup
                 ? "Create a console PIN for this profile (stored locally). Freighter still signs on-chain spending."

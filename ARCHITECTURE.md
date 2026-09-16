@@ -1,8 +1,8 @@
-# AgentPay — Architecture & Safety Design
+# AgenticVender — Architecture & Safety Design
 
 ## Overview
 
-AgentPay is a **delegated agent wallet** on Stellar. Its core job: let a human grant an AI agent
+AgenticVender is a **delegated agent wallet** on Stellar. Its core job: let a human grant an AI agent
 a capped, expiring, on-chain spending limit — and revoke it at any time.
 
 The architecture is split into four layers:
@@ -48,7 +48,7 @@ The architecture is split into four layers:
 ├─────────────────────────────────────────────────────┤
 │                                                     │
 │  Console PIN (app login)                            │
-│  ├─ Unlock AgentPay dashboard                       │
+│  ├─ Unlock AgenticVender dashboard                       │
 │  ├─ Stored: scrypt hash in .data/auth.json          │
 │  └─ Protects: access to the UI console              │
 │                                                     │

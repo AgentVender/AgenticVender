@@ -118,7 +118,7 @@ export default function LandingPage() {
             <div className="flex size-10 items-center justify-center rounded-xl bg-primary/15">
               <Bot className="size-6 text-primary" />
             </div>
-            AgentPay
+            AgenticVender
           </div>
 
           <Link href="/dashboard">
@@ -252,7 +252,7 @@ export default function LandingPage() {
         <section className="border-t border-border/60 bg-card/30 py-20 lg:py-28">
           <div className="mx-auto max-w-6xl px-6 lg:px-8">
             <h2 className="text-center text-3xl font-bold sm:text-4xl lg:text-5xl">
-              What AgentPay does
+              What AgenticVender does
             </h2>
 
             <p className="mx-auto mt-4 max-w-2xl text-center text-lg text-muted-foreground sm:text-xl">
@@ -329,7 +329,7 @@ export default function LandingPage() {
       </main>
 
       <footer className="border-t border-border/60 py-10 text-center text-base text-muted-foreground sm:text-lg">
-        AgentPay · PIN-secured console, Stellar-settled · Hackathon MVP
+        AgenticVender · PIN-secured console, Stellar-settled · Autonomous Agent Commerce
       </footer>
     </div>
   );
