@@ -69,6 +69,28 @@ impl AgentRegistry {
             .ok_or(Error::AgentNotFound)
     }
 
+    /// Update the metadata string for an existing agent. Only the owner can update.
+    pub fn update_metadata(
+        env: Env,
+        owner: Address,
+        agent_id: BytesN<32>,
+        metadata: String,
+    ) -> Result<(), Error> {
+        owner.require_auth();
+        let key = DataKey::Agent(agent_id);
+        let mut data: AgentData = env
+            .storage()
+            .persistent()
+            .get(&key)
+            .ok_or(Error::AgentNotFound)?;
+        if data.owner != owner {
+            return Err(Error::NotAuthorized);
+        }
+        data.metadata = metadata;
+        env.storage().persistent().set(&key, &data);
+        Ok(())
+    }
+
     pub fn get_reputation(env: Env, agent_id: BytesN<32>) -> ReputationData {
         env.storage()
             .persistent()
