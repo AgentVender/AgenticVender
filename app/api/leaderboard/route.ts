@@ -1,18 +1,21 @@
 import { NextResponse } from "next/server";
 import { store } from "@/lib/demo-store";
+import type { LeaderboardEntry } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   const providers = store.agents.filter((a) => a.isProvider);
 
-  const ranked = providers
+  const ranked: LeaderboardEntry[] = providers
     .map((provider) => {
       const providerJobs = store.jobs.filter((j) => j.providerAgentId === provider.id);
       const totalEarned = providerJobs.reduce((sum, j) => sum + j.amount, 0);
       const paidJobs = providerJobs.filter(
         (j) => j.status === "paid" || j.status === "completed" || j.status === "delivered",
       );
+
+      // Most recent job/event for "last activity"
       const sortedJobs = [...providerJobs].sort(
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
@@ -29,7 +32,9 @@ export async function GET() {
         lastActivityAt: lastJob?.createdAt ?? recentEvent?.createdAt ?? null,
         lastActivityMessage:
           recentEvent?.message ??
-          (lastJob ? `Earned ${lastJob.amount} USDC from a completed job` : null),
+          (lastJob
+            ? `Earned ${lastJob.amount.toFixed(2)} USDC from a completed job`
+            : null),
       };
     })
     .sort(
