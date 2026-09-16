@@ -75,6 +75,21 @@ impl Marketplace {
         env.storage().persistent().get(&DataKey::Listing(listing_id)).ok_or(Error::NotFound)
     }
 
+    /// Deactivate a listing so it can no longer be purchased.
+    /// Only the original provider can deactivate their own listing.
+    pub fn deactivate_listing(env: Env, provider: Address, listing_id: u64) -> Result<(), Error> {
+        provider.require_auth();
+        let key = DataKey::Listing(listing_id);
+        let mut listing: Listing = env
+            .storage()
+            .persistent()
+            .get(&key)
+            .ok_or(Error::NotFound)?;
+        listing.active = false;
+        env.storage().persistent().set(&key, &listing);
+        Ok(())
+    }
+
     /// THE money-shot: atomic delegation check -> USDC transfer -> reputation bump.
     pub fn purchase(
         env: Env,
