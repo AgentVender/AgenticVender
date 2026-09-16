@@ -1,12 +1,21 @@
 import { Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
-export function ReputationBadge({ score }: { score: number }) {
+interface ReputationBadgeProps {
+  score: number;
+  /** Show numeric value alongside the star */
+  showValue?: boolean;
+  className?: string;
+}
+
+export function ReputationBadge({ score, showValue = true, className }: ReputationBadgeProps) {
   const variant = score >= 90 ? "default" : score >= 70 ? "accent" : "muted";
+  const label = score > 0 ? (showValue ? score : undefined) : "new";
   return (
-    <Badge variant={variant} className="gap-1">
+    <Badge variant={variant} className={cn("gap-1", className)}>
       <Star className="size-3 fill-current" />
-      {score || "new"}
+      {label}
     </Badge>
   );
 }
