@@ -60,16 +60,9 @@ export default function MarketplacePage() {
     setProviders((s.providers ?? []).filter((p: Agent) => p.isProvider));
     const buyers: Agent[] = a.agents ?? [];
     setAgents(buyers);
-    const nextBuyer = buyerId || buyers[0]?.id || "";
-    if (!buyerId && buyers[0]) setBuyerId(buyers[0].id);
-    if (nextBuyer) {
-      const detail = await fetch(`/api/agents/${nextBuyer}`, {
-        cache: "no-store",
-      }).then((r) => r.json());
-      setDelegation(detail.delegation ?? null);
-    } else {
-      setDelegation(null);
-    }
+    // Only set default buyer on first load; subsequent buyer changes are handled
+    // by the buyerId useEffect below (avoids stale-closure lint warning).
+    setBuyerId((prev) => prev || buyers[0]?.id || "");
   }, [wallet.address]);
 
   useEffect(() => {

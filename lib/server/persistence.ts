@@ -22,7 +22,7 @@ interface EncBlob {
 
 function encKey(): Buffer {
   const secret =
-    process.env.STORE_ENC_KEY || process.env.STELLAR_RELAYER_SECRET || "agentpay-dev-only-key";
+    process.env.STORE_ENC_KEY || process.env.STELLAR_RELAYER_SECRET || "agenticvender-dev-only-key";
   return crypto.createHash("sha256").update(secret).digest();
 }
 

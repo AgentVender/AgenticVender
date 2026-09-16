@@ -56,8 +56,8 @@ function createStore(): Store {
   return s;
 }
 
-const g = globalThis as unknown as { __agentpay?: Store };
-export const store: Store = g.__agentpay ?? (g.__agentpay = createStore());
+const g = globalThis as unknown as { __agenticvender?: Store };
+export const store: Store = g.__agenticvender ?? (g.__agenticvender = createStore());
 mergeMarketplaceCatalog(store);
 
 /** Persist the current store (debounced). Call after mutations without events. */

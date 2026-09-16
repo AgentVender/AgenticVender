@@ -22,7 +22,7 @@ interface WalletContextValue {
 
 const WalletContext = createContext<WalletContextValue | null>(null);
 
-const STORAGE_KEY = "agentpay_wallet";
+const STORAGE_KEY = "agenticvender_wallet";
 
 export function WalletProvider({ children }: { children: React.ReactNode }) {
   const [address, setAddress] = useState<string | null>(null);
