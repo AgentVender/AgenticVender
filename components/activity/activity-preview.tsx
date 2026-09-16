@@ -2,10 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Coins, Search, Send, CheckCircle2, TrendingUp, ShieldAlert } from "lucide-react";
+import {
+  ArrowRight, Coins, Search, Send, CheckCircle2, TrendingUp,
+  ShieldAlert, Zap, ShieldCheck, ShieldOff,
+} from "lucide-react";
 import type { ActivityEvent, EventType } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { ExplorerTxLink } from "@/components/stellar/explorer-tx-link";
+import { relativeTime } from "@/lib/utils";
 
 const ICONS: Record<EventType, typeof Coins> = {
   discovered: Search,
@@ -14,6 +18,9 @@ const ICONS: Record<EventType, typeof Coins> = {
   delivered: CheckCircle2,
   rep_updated: TrendingUp,
   blocked: ShieldAlert,
+  provisioned: Zap,
+  delegated: ShieldCheck,
+  revoked: ShieldOff,
 };
 
 const COLORS: Record<EventType, string> = {
@@ -23,6 +30,9 @@ const COLORS: Record<EventType, string> = {
   delivered: "text-emerald-400",
   rep_updated: "text-amber-400",
   blocked: "text-destructive",
+  provisioned: "text-cyan-400",
+  delegated: "text-green-400",
+  revoked: "text-orange-400",
 };
 
 export function ActivityPreview({ limit = 5 }: { limit?: number }) {
@@ -33,11 +43,11 @@ export function ActivityPreview({ limit = 5 }: { limit?: number }) {
     let active = true;
     const load = async () => {
       try {
-        const res = await fetch("/api/events", { cache: "no-store" });
+        const res = await fetch(`/api/events?limit=${limit}`, { cache: "no-store" });
         const data = await res.json();
         if (active) setEvents((data.events ?? []).slice(0, limit));
       } catch {
-        /* ignore */
+        /* ignore transient errors */
       } finally {
         if (active) setLoading(false);
       }
@@ -75,18 +85,21 @@ export function ActivityPreview({ limit = 5 }: { limit?: number }) {
       ) : (
         <ul className="flex flex-col gap-3">
           {events.map((e) => {
-            const Icon = ICONS[e.type];
+            const Icon = ICONS[e.type] ?? TrendingUp;
             return (
               <li
                 key={e.id}
                 className="flex items-start gap-3 rounded-xl border border-border/60 bg-background/50 p-4"
               >
-                <Icon className={`mt-0.5 size-5 shrink-0 ${COLORS[e.type]}`} />
+                <Icon className={`mt-0.5 size-5 shrink-0 ${COLORS[e.type] ?? "text-muted-foreground"}`} />
                 <div className="min-w-0 flex-1">
                   <p className="text-base sm:text-lg">{e.message}</p>
                   <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
-                    <span className="text-sm text-muted-foreground">
-                      {new Date(e.createdAt).toLocaleString()}
+                    <span
+                      className="text-sm text-muted-foreground"
+                      title={new Date(e.createdAt).toLocaleString()}
+                    >
+                      {relativeTime(e.createdAt)}
                     </span>
                     <ExplorerTxLink hash={e.txHash} />
                   </div>
