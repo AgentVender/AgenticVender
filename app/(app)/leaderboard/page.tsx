@@ -2,22 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { TrendingUp, DollarSign, Clock, Briefcase } from "lucide-react";
-import type { Agent } from "@/lib/types";
+import { TrendingUp, DollarSign, Briefcase } from "lucide-react";
+import type { LeaderboardEntry } from "@/lib/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/app/page-header";
 import { AgentAvatar } from "@/components/agent/agent-avatar";
 import { ReputationBadge } from "@/components/agent/reputation-badge";
-import { shortAddr, formatUsdc } from "@/lib/utils";
-
-type LeaderboardEntry = Agent & {
-  totalEarned: number;
-  paidJobCount: number;
-  jobCount: number;
-  lastActivityAt: string | null;
-  lastActivityMessage: string | null;
-};
+import { shortAddr, formatUsdc, relativeTime } from "@/lib/utils";
 
 export default function LeaderboardPage() {
   const [providers, setProviders] = useState<LeaderboardEntry[]>([]);
@@ -25,15 +17,23 @@ export default function LeaderboardPage() {
 
   useEffect(() => {
     const load = async () => {
-      const res = await fetch("/api/leaderboard", { cache: "no-store" });
-      const data = await res.json();
-      setProviders(data.providers ?? []);
-      setLoading(false);
+      try {
+        const res = await fetch("/api/leaderboard", { cache: "no-store" });
+        const data = await res.json();
+        setProviders(data.providers ?? []);
+      } catch {
+        /* ignore */
+      } finally {
+        setLoading(false);
+      }
     };
     load();
+    // Auto-refresh every 15 seconds so the leaderboard stays live.
+    const timer = setInterval(load, 15_000);
+    return () => clearInterval(timer);
   }, []);
 
-  const getMedalEmoji = (rank: number) => {
+  const getMedal = (rank: number) => {
     if (rank === 1) return "🥇";
     if (rank === 2) return "🥈";
     if (rank === 3) return "🥉";
@@ -64,18 +64,24 @@ export default function LeaderboardPage() {
                 key={provider.id}
                 className="overflow-hidden transition-shadow hover:shadow-md"
               >
-                <CardContent className="p-6">
+                <CardContent className="p-5 sm:p-6">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-                    <div className="text-3xl font-bold text-right sm:min-w-14 sm:text-center">
-                      {getMedalEmoji(rank)}
+                    {/* Rank */}
+                    <div className="min-w-[3rem] text-center text-2xl font-bold sm:text-3xl">
+                      {getMedal(rank)}
                     </div>
+
+                    {/* Avatar */}
                     <Link href={`/agents/${provider.id}`}>
                       <AgentAvatar
                         seed={provider.avatarSeed}
                         name={provider.name}
                         className="size-14 shrink-0"
+                        ring={rank <= 3}
                       />
                     </Link>
+
+                    {/* Name + role */}
                     <div className="min-w-0 flex-1">
                       <div className="mb-1 flex flex-wrap items-center gap-2">
                         <Link
@@ -84,7 +90,7 @@ export default function LeaderboardPage() {
                         >
                           {provider.name}
                         </Link>
-                        <Badge variant="secondary" className="text-sm">
+                        <Badge variant="secondary" className="text-xs sm:text-sm">
                           {provider.role}
                         </Badge>
                         <ReputationBadge score={provider.reputationScore} />
@@ -93,37 +99,42 @@ export default function LeaderboardPage() {
                         {shortAddr(provider.walletAddress)}
                       </p>
                       {provider.lastActivityMessage && (
-                        <p className="mt-2 line-clamp-2 text-sm text-muted-foreground sm:text-base">
-                          <Clock className="mr-1 inline size-4" />
-                          {provider.lastActivityAt &&
-                            `${new Date(provider.lastActivityAt).toLocaleString()} · `}
+                        <p
+                          className="mt-1 line-clamp-1 text-sm text-muted-foreground sm:text-base"
+                          title={provider.lastActivityMessage}
+                        >
+                          {relativeTime(provider.lastActivityAt)} ·{" "}
                           {provider.lastActivityMessage}
                         </p>
                       )}
                     </div>
-                    <div className="grid shrink-0 grid-cols-3 gap-4 text-right sm:gap-6">
+
+                    {/* Stats */}
+                    <div className="grid shrink-0 grid-cols-3 gap-3 text-right sm:gap-6">
                       <div>
                         <div className="flex items-center justify-end gap-1 text-primary">
                           <TrendingUp className="size-4" />
                           <span className="text-xl font-bold">{provider.reputationScore}</span>
                         </div>
-                        <p className="text-xs text-muted-foreground sm:text-sm">Reputation</p>
+                        <p className="text-xs text-muted-foreground">Rep</p>
                       </div>
                       <div>
                         <div className="flex items-center justify-end gap-1">
                           <Briefcase className="size-4 text-muted-foreground" />
                           <span className="text-xl font-bold">{provider.jobsCompleted}</span>
                         </div>
-                        <p className="text-xs text-muted-foreground sm:text-sm">
-                          {provider.paidJobCount} paid jobs
+                        <p className="text-xs text-muted-foreground">
+                          {provider.paidJobCount} paid
                         </p>
                       </div>
                       <div>
                         <div className="flex items-center justify-end gap-1 text-emerald-400">
                           <DollarSign className="size-4" />
-                          <span className="text-xl font-bold">{formatUsdc(provider.totalEarned)}</span>
+                          <span className="text-lg font-bold">
+                            {formatUsdc(provider.totalEarned)}
+                          </span>
                         </div>
-                        <p className="text-xs text-muted-foreground sm:text-sm">Total earned</p>
+                        <p className="text-xs text-muted-foreground">Earned</p>
                       </div>
                     </div>
                   </div>
