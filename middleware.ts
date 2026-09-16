@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-const AUTH_SESSION_COOKIE = "agentpay_session";
+const AUTH_SESSION_COOKIE = "agenticvender_session";
 const protectedPrefixes = ["/dashboard", "/marketplace", "/activity", "/agents"];
 
 export function middleware(req: NextRequest) {
