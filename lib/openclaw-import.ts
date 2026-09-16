@@ -45,6 +45,27 @@ export const OPENCLAW_CATALOG: OpenClawAgent[] = [
     skills: ["writing", "seo", "social"],
     workspace: OPENCLAW_WORKSPACE,
   },
+  {
+    id: "oc_compliance_checker",
+    name: "Compliance Checker",
+    role: "Flags regulatory risks in contracts and policies.",
+    skills: ["legal", "compliance", "gdpr"],
+    workspace: OPENCLAW_WORKSPACE,
+  },
+  {
+    id: "oc_data_pipeline",
+    name: "Data Pipeline Agent",
+    role: "Fetches, normalises, and routes data between services.",
+    skills: ["etl", "data", "api"],
+    workspace: OPENCLAW_WORKSPACE,
+  },
+  {
+    id: "oc_invoice_bot",
+    name: "Invoice Bot",
+    role: "Generates and tracks invoices for completed work.",
+    skills: ["billing", "finance", "pdf"],
+    workspace: OPENCLAW_WORKSPACE,
+  },
 ];
 
 export function getOpenClawAgent(id: string): OpenClawAgent | undefined {
