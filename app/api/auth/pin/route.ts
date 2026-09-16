@@ -4,25 +4,29 @@ import { AUTH_SESSION_COOKIE, authCookieOptions } from "@/lib/server/auth";
 import { getOrCreateUser, setUserPin, userHasPin, verifyUserPin } from "@/lib/server/auth-store";
 
 export async function GET(req: Request) {
-  const username = new URL(req.url).searchParams.get("username") ?? "demo";
+  const username = (new URL(req.url).searchParams.get("username") ?? "demo").trim().toLowerCase();
   getOrCreateUser(username);
   return NextResponse.json({ hasPin: userHasPin(username) });
 }
 
 export async function POST(req: Request) {
-  const body = await req.json().catch(() => ({}));
-  const username = String(body.username ?? "demo");
+  const body = await req.json().catch(() => ({})) as Record<string, unknown>;
+  const username = String(body.username ?? "demo").trim().toLowerCase() || "demo";
   const pin = String(body.pin ?? "");
   const confirmPin = body.confirmPin != null ? String(body.confirmPin) : undefined;
 
   if (!pin) {
     return NextResponse.json({ error: "Enter your PIN" }, { status: 400 });
   }
+  if (pin.length < 4) {
+    return NextResponse.json({ error: "PIN must be at least 4 characters" }, { status: 400 });
+  }
 
   const hasPin = userHasPin(username);
 
   try {
     if (!hasPin) {
+      // First-time setup: require confirmation
       if (confirmPin === undefined) {
         return NextResponse.json({ error: "Confirm your PIN", needsSetup: true }, { status: 400 });
       }
@@ -31,12 +35,16 @@ export async function POST(req: Request) {
       }
       setUserPin(username, pin);
     } else if (!verifyUserPin(username, pin)) {
+      // Constant-time compare happens inside verifyUserPin
       return NextResponse.json({ error: "Incorrect PIN" }, { status: 401 });
     }
 
     const user = getOrCreateUser(username);
     const jar = await cookies();
-    jar.set(AUTH_SESSION_COOKIE, user.username, { ...authCookieOptions(), maxAge: 60 * 60 * 8 });
+    jar.set(AUTH_SESSION_COOKIE, user.username, {
+      ...authCookieOptions(),
+      maxAge: 60 * 60 * 8, // 8 hours
+    });
     return NextResponse.json({ ok: true, username: user.username, createdPin: !hasPin });
   } catch (e) {
     const message = e instanceof Error ? e.message : "PIN login failed";

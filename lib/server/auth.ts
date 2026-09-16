@@ -9,7 +9,7 @@ export function isAdminAuthorized(req: Request): boolean {
   return req.headers.get("x-admin-token") === token;
 }
 
-export const AUTH_SESSION_COOKIE = "agentpay_session";
+export const AUTH_SESSION_COOKIE = "agenticvender_session";
 
 export function authCookieOptions() {
   return {
