@@ -97,12 +97,17 @@ export async function executePurchase(buyerAgentId: string, serviceId: string): 
   provider.successfulPayments += 1;
   provider.reputationScore = Math.min(
     100,
-    Math.round((provider.successfulPayments / provider.jobsCompleted) * 100)
+    Math.round((provider.successfulPayments / provider.jobsCompleted) * 100),
   );
+
+  // Bump buyer reputation too (mirrors on-chain record_job for the buyer).
+  buyer.jobsCompleted += 1;
+  buyer.successfulPayments += 1;
 
   const job: Job = {
     id: `job-${Date.now()}`,
     serviceId: service.id,
+    serviceTitle: service.title,
     buyerAgentId,
     providerAgentId: provider.id,
     amount: service.price,
