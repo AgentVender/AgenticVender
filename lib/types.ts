@@ -8,9 +8,13 @@ export interface Agent {
   jobsCompleted: number;
   successfulPayments: number;
   isProvider: boolean;
-  /** MVP: marks agents imported from OpenClaw workspace */
+  /** Marks agents imported from an OpenClaw workspace */
   source?: "local" | "openclaw";
   openclawId?: string;
+  /** ISO timestamp of when this agent was created */
+  createdAt?: string;
+  /** Skills this agent offers or uses (free-form tags) */
+  skills?: string[];
 }
 
 export interface Delegation {
@@ -22,6 +26,8 @@ export interface Delegation {
   onchainTxHash?: string;
   /** True when grant() was actually submitted to Stellar (Freighter or relayer). */
   onchainLive?: boolean;
+  /** ISO timestamp of when the delegation was created */
+  grantedAt?: string;
 }
 
 export interface Service {
@@ -34,6 +40,8 @@ export interface Service {
   price: number;
   category: string;
   onchainListingId?: number;
+  /** ISO timestamp of when this listing was created */
+  listedAt?: string;
 }
 
 export type JobStatus =
@@ -54,6 +62,8 @@ export interface Job {
   resultPayload?: unknown;
   createdAt: string;
   completedAt?: string;
+  /** Human-readable title of the purchased service (denormalized for display) */
+  serviceTitle?: string;
 }
 
 export type EventType =
@@ -62,7 +72,10 @@ export type EventType =
   | "paid"
   | "delivered"
   | "rep_updated"
-  | "blocked";
+  | "blocked"
+  | "provisioned"
+  | "delegated"
+  | "revoked";
 
 export interface ActivityEvent {
   id: string;
@@ -72,3 +85,12 @@ export interface ActivityEvent {
   txHash?: string;
   createdAt: string;
 }
+
+/** Leaderboard entry — provider agent extended with earnings data */
+export type LeaderboardEntry = Agent & {
+  totalEarned: number;
+  paidJobCount: number;
+  jobCount: number;
+  lastActivityAt: string | null;
+  lastActivityMessage: string | null;
+};
