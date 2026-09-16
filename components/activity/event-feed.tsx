@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Coins, Search, Send, CheckCircle2, TrendingUp, ShieldAlert } from "lucide-react";
+import { Coins, Search, Send, CheckCircle2, TrendingUp, ShieldAlert, Zap, ShieldCheck, ShieldOff } from "lucide-react";
 import type { ActivityEvent, EventType } from "@/lib/types";
 import { ExplorerTxLink } from "@/components/stellar/explorer-tx-link";
 
@@ -12,6 +12,9 @@ const ICONS: Record<EventType, typeof Coins> = {
   delivered: CheckCircle2,
   rep_updated: TrendingUp,
   blocked: ShieldAlert,
+  provisioned: Zap,
+  delegated: ShieldCheck,
+  revoked: ShieldOff,
 };
 
 const COLORS: Record<EventType, string> = {
@@ -21,6 +24,9 @@ const COLORS: Record<EventType, string> = {
   delivered: "text-emerald-400",
   rep_updated: "text-amber-400",
   blocked: "text-destructive",
+  provisioned: "text-cyan-400",
+  delegated: "text-green-400",
+  revoked: "text-orange-400",
 };
 
 export function EventFeed({ pollMs = 1500, limit = 50 }: { pollMs?: number; limit?: number }) {
